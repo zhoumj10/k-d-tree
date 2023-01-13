@@ -1,0 +1,35 @@
+def range(self, rectangle: Rectangle) -> List[Point]:#Range search of KDTree
+        """range query"""
+        matches = []
+
+        def travel(node, depth):
+            # print("node:\n",node)
+            x = node.location.x
+            y = node.location.y
+            xmin=rectangle.lower.x
+            xmax=rectangle.upper.x
+            ymin=rectangle.lower.y
+            ymax=rectangle.upper.y
+            # the node is in the range
+            if xmin <= x and x <= xmax and ymin <= y and y <= ymax:
+                # print("node:\n",node)
+                matches.append(node.location)
+            if depth % 2 == 0:#search as the x value
+                if node[1] != None:  # left exist
+                    if x >= xmin:
+                        travel(node.left, depth + 1)
+                if node[2] != None:  # right exist
+                    if x <= xmax:
+                        travel(node.right, depth + 1)
+            else:#search as the y value
+                if node[1] != None:  # left exist
+                    if y >= ymin:
+                        travel(node.left, depth + 1)
+                if node[2] != None:  # right exist
+                    if y <= ymax:
+                        travel(node.right, depth + 1)
+
+        travel(self._root, 0)
+
+        return matches
+
